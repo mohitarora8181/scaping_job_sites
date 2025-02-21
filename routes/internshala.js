@@ -15,12 +15,15 @@ inShala.get("/", async (req, res) => {
         const experience = 1
         const state = "Delhi"
 
+        const email = process.env.INSHALA_MAIL;
+        const password = process.env.INSHALA_PASS;
+
         await page.goto("https://internshala.com/login/student", { waitUntil: "domcontentloaded" });
-        await page.evaluate(async () => {
-            document.getElementById("email").value = "";
-            document.getElementById("password").value = "";
+        await page.evaluate(async (email,password) => {
+            document.getElementById("email").value = email;
+            document.getElementById("password").value = password;
             document.querySelector("#login_submit").click();
-        });
+        },email,password);
 
         await page.waitForNavigation("https://internshala.com/student/dashboard");
 

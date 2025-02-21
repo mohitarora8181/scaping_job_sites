@@ -5,6 +5,7 @@ import bodyParser from "body-parser";
 import linkedin from "./routes/linkedin.js";
 import inShala from "./routes/internshala.js";
 import instahyre from "./routes/instahyre.js";
+import naukri from "./routes/naukri.js";
 
 config();
 
@@ -20,6 +21,7 @@ app.get("/",(req,res)=>{
 app.use("/linkedin",linkedin);
 app.use("/internshala",inShala);
 app.use("/instahyre",instahyre);
+app.use("/naukri",naukri);
 
 app.listen(port,()=>{
     console.log(`Server is running on ${port}`);

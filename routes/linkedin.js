@@ -15,12 +15,15 @@ lin.get("/", async (req, res) => {
         const experience = 1
         const state = "Delhi"
 
+        const email = process.env.LINKEDIN_MAIL;
+        const password = process.env.LINKEDIN_PASS;
+
         await page.goto("https://www.linkedin.com/login", { waitUntil: "domcontentloaded" });
-        await page.evaluate(async () => {
-            document.getElementById("username").value = "";
-            document.getElementById("password").value = "";
+        await page.evaluate(async (email,password) => {
+            document.getElementById("username").value = email;
+            document.getElementById("password").value = password;
             document.querySelector("button[aria-label='Sign in'").click();
-        });
+        },email,password);
 
         await page.waitForResponse("https://www.linkedin.com/feed/").then(async () => {
             await page.goto(`https://linkedin.com/jobs/search?keywords=${keyword}`, { waitUntil: "domcontentloaded" });

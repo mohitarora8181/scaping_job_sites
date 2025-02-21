@@ -17,14 +17,16 @@ instahyre.get("/", async (req, res) => {
         const experience = 1
         const location = "Delhi+%2F+NCR"
 
+        const email = process.env.INSTAHYRE_MAIL;
+        const password = process.env.INSTAHYRE_PASS;
+
         await page.goto("https://www.instahyre.com/login/", { waitUntil: "domcontentloaded" });
 
-
-        await page.evaluate(() => {
-            document.getElementById("email").value = "";
-            document.getElementById("password").value = "";
+        await page.evaluate((email, password) => {
+            document.getElementById("email").value = email;
+            document.getElementById("password").value = password;
             document.getElementById("login-form").children[0].click();
-        });
+        }, email, password);
 
         await page.waitForNavigation("https://www.instahyre.com/candidate/opportunities/");
 
@@ -33,10 +35,10 @@ instahyre.get("/", async (req, res) => {
         for (let obj of data.objects) {
             await page.goto(obj.public_url, { waitUntil: "domcontentloaded" });
             await page.waitForSelector(".apply-button");
-            await page.evaluate(()=>{
+            await page.evaluate(() => {
                 document.getElementsByTagName("button")[0].click()
             });
-            console.log("Job ID filled :- "+obj.id);
+            console.log("Job ID filled :- " + obj.id);
             await page.waitForSelector(".application-sent");
         }
 
